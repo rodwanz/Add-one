@@ -17,11 +17,11 @@
 (defn ensure-counter-exists [conn]
   (let [db (d/db conn)
         exists? (d/q '[:find ?e . :where
-                       [?e :counter/id "global-counter"]]
+                       [?e :counter/id "sum-performed"]]
                      db)]
     (when-not exists?
       @(d/transact conn
-                   [{:counter/id "global-counter"
+                   [{:counter/id "sum-performed"
                      :counter/value 0}]))))
 
 (defn init-db []
@@ -39,13 +39,13 @@
   (let [db (d/db conn)
         curr-val (or
                    (d/q '[:find ?v . :where
-                          [?e :counter/id "global-counter"]
+                          [?e :counter/id "sum-performed"]
                           [?e :counter/value ?v]] db)
                    0)
         new-val (inc curr-val)]
     (println "Incrementing from" curr-val "to" new-val)
     @(d/transact conn
-                 [[:db/add [:counter/id "global-counter"]
+                 [[:db/add [:counter/id "sum-performed"]
                    :counter/value new-val]])
     new-val))
 
