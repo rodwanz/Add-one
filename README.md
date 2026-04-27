@@ -1,22 +1,95 @@
-# add-one
+# 🚀 Add-one Project with Datomic + Clojure + ClojureScript
 
-A Clojure library designed to ... well, that part is up to you.
+This project is a simple example of a counter using:
 
-## Usage
+- Backend in **Clojure** (Ring + Compojure)
+- **Datomic** database
+- Frontend in **ClojureScript** with **Reagent**
+- Build tool: **Leiningen**
+- Frontend build: **shadow-cljs**
 
-FIXME
+---
 
-## License
+## 📦 Prerequisites
 
-Copyright © 2026 FIXME
+Before starting, you need to have installed:
 
-This program and the accompanying materials are made available under the
-terms of the Eclipse Public License 2.0 which is available at
-https://www.eclipse.org/legal/epl-2.0.
+- Java (JDK 8 or higher), i´m use JDK 25
 
-This Source Code may also be made available under the following Secondary
-Licenses when the conditions for such availability set forth in the Eclipse
-Public License, v. 2.0 are satisfied: GNU General Public License as published by
-the Free Software Foundation, either version 2 of the License, or (at your
-option) any later version, with the GNU Classpath Exception which is available
-at https://www.gnu.org/software/classpath/license.html.
+- Leiningen
+- Node.js + npm
+- Datomic (Peer or Dev Local)
+
+---
+
+## 🗄️ 1. Starting Datomic
+
+### 🔹 For Datomic Dev (local)
+
+1. Go to the Datomic folder:
+
+``terminal
+
+    cd /datomic-pro
+
+2. Start the transactor:
+
+       bin/transactor config/samples/dev-transactor-template.properties
+
+3. Verify that the following appears:
+
+       System started
+
+## ⚙️ 2. Running the Backend
+In the project's root folder::
+
+    lein run
+
+## 💻 3. Running the Frontend
+ 1. In another terminal, access the project root folder:
+
+         npx shadow-cljs watch app
+2. The frontend runs at:
+
+         http://localhost:3001
+
+## 🌐 4. Accessing the application
+Open in your browser:
+
+     http://localhost:3000
+
+## ✅ 5. Verify if the counter is receiving the increment:
+
+     http://localhost:3000/api/counter
+
+## 🧪 6. Critical test!
+
+   1. After starting the backend, run:
+
+      In the bash shell, in the project's root folder:
+
+          bash: curl http://localhost:3000/api/counter
+
+      You will see that it is zero (0)
+ 
+
+2. Click the "Add +1" button several times
+
+3. Then verify that the addition was successful, then run:
+
+       bash: curl -X POST http://localhost:3000/api/increment
+
+## ✅ 7. Accessing the created database
+
+1. Go to the Datomic root folder, in another terminal and run:
+
+       bin/console -p 8080 dev datomic:dev://localhost:4334/
+
+2. The following information will appear:
+
+    Console started on port: 8080
+dev = datomic:dev://localhost:4334/
+open http://localhost:8080/browse in your browser (Chrome recommended)
+
+3. Copy the http address and paste it into your browser, The console will be there for verifying the created database and also the increments made
+after the addition
