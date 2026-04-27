@@ -93,3 +93,6 @@ open http://localhost:8080/browse in your browser (Chrome recommended)
 
 3. Copy the http and paste it into your browser. There you will find the console for verifying the created database (DB). In this field, you can check the name and also the increments made after the addition. These fields contain the identifier (?:counter-id/?id) and the value (?:counter-value/?value). Then, press "Run query".
 4. Carefully follow the tips presented above to operate the console correctly, following the images below.
+
+![Console1](doc/images/Captura-de-tela-2026-04-27-173240)
+![Console2](doc/images/Captura-de-tela-2026-04-27-173127)
