@@ -14,7 +14,7 @@
              (response
                {:value (or
                          (d/q '[:find ?v . :where
-                               [?e :counter/id "sum-performed"]
+                               [?e :counter/id "global-counter"]
                                [?e :counter/value ?v]]
                               (d/db conn))
                          0)}))
