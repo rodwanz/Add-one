@@ -35,6 +35,16 @@
     (ensure-counter-exists conn)
     conn))
 
+(defonce conn (init-db))
+
+(defn get-counter []
+  (or
+    (d/q '[:find ?v . :where
+           [?e :counter/id "global-counter"]
+           [?e :counter/value ?v]]
+         (d/db conn))
+    0))
+
 (defn add-to-the-counter [conn]
   (let [db (d/db conn)
         curr-val (or

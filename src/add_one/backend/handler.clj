@@ -4,22 +4,14 @@
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.util.response :refer [response]]
-            [datomic.api :as d]
             [add-one.backend.db :as db]))
-
-(def conn (db/init-db))
 
 (defroutes app-routes
            (GET "/api/counter" []
              (response
-               {:value (or
-                         (d/q '[:find ?v . :where
-                               [?e :counter/id "global-counter"]
-                               [?e :counter/value ?v]]
-                              (d/db conn))
-                         0)}))
+               {:value (db/get-counter)}))
            (POST "/api/increment" []
-             (response {:value (db/add-to-the-counter conn )}))
+             (response {:value (db/add-to-the-counter)}))
            (route/not-found
              (response {:error "Route not found"})))
 
