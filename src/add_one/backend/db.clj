@@ -37,7 +37,7 @@
 
 (defonce conn (init-db))
 
-(defn get-counter []
+(defn get-counter [conn]
   (or
     (d/q '[:find ?v . :where
            [?e :counter/id "global-counter"]

@@ -9,7 +9,7 @@
 (defroutes app-routes
            (GET "/api/counter" []
              (response
-               {:value (db/get-counter)}))
+               {:value (db/get-counter db/conn)}))
            (POST "/api/increment" []
              (response {:value (db/add-to-the-counter db/conn)}))
            (route/not-found
