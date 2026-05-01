@@ -11,7 +11,7 @@
              (response
                {:value (db/get-counter)}))
            (POST "/api/increment" []
-             (response {:value (db/add-to-the-counter)}))
+             (response {:value (db/add-to-the-counter db/conn)}))
            (route/not-found
              (response {:error "Route not found"})))
 
