@@ -13,6 +13,8 @@
     (is (= 3 (db/add-to-the-counter conn)))
 
     (let [value (d/q '[:find ?v .
-                       :where [_ :counter/value ?v]]
+                       :where
+                       [?e :counter/value ?v]
+                       [?e :counter/id "global-counter"]]
                      (d/db conn))]
       (is (= 3 value)))))
