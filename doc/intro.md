@@ -24,17 +24,20 @@ The application is divided into three main parts:
 ### 🔹 Backend
 - Built with Ring + Compojure
 - Responsible for exposing HTTP endpoints
-- Performs operations on Datomic
+- Does not directly access Datomic
+- Delegates operations to the `db` layer
 
 ### 🔹 Database (Datomic)
 - Immutable database
 - Based on facts (datoms)
-- Native history support
+- Native support for history
+- Access encapsulated in the `db` namespace
 
 ### 🔹 Frontend
 - Built with Reagent (React wrapper)
+
 - Responsible for interacting with the user
-- Consumes the Backend API
+- Consumes the backend API
 
 ---
 
@@ -42,59 +45,102 @@ The application is divided into three main parts:
 
 1. The user clicks the "increment" button
 2. The frontend makes an HTTP request
-3. The backend processes the request
-4. Datomic stores a new value
-5. The backend returns the updated value
-6. The frontend updates the interface
+3. The backend receives the request
+4. The handler delegates the logic to the `db` module
+5. Datomic stores a new (immutable) value
+6. The backend returns the updated value
+7. The frontend updates the interface
 
 ---
 
 ## ⚙️ Design Decisions
 
-### 🧩 Datomic Usage
+### 🧩 Use of Datomic
 
-Datomic was chosen because:
+Datomic was chosen because of:
 
-- Immutable model (avoids race conditions)
+- Immutable model (based on facts)
 - Support for automatic history
 - Separation between reading (`d/db`) and writing (`conn`)
 
-### 🔁 Counter Increment
+---
+
+### 🧱 Separation of responsibilities
+
+The project was structured to Decoupling Layers:
+
+- `handler` → responsible only for HTTP
+- `db` → responsible for Datomic access
+
+Before refactoring, the handler accessed the database directly:
+
+(d/q ... (d/db conn))
+
+After refactoring:
+
+(db/get-counter conn)
+
+Benefits:
+
+- Reduced coupling
+
+- Improved testability
+
+- Centralization of persistence logic
+
+### 🔌 Connection Management
+
+The connection to Datomic is initialized in the db namespace:
+
+(defonce conn (init-db))
+
+And explicitly passed to the functions:
+
+
+(db/get-counter conn)
+
+
+Motivation:
+
+Avoid implicit dependencies
+
+Facilitate testing with different connections
+
+🔁 Counter Increment
 
 The increment is done through:
 
-- Reading the last value from the database
-- Creating a new transaction with the incremented value
+Reading the current value from the database
+Calculating the new value
+Persistence via Transaction:
 
----
+[:db/add [:counter/id "global-counter"]
 
-## ⚠️ Potential Problems
+:counter/value new-val]
 
-### Concurrency
+📚 Important Concepts
 
-If multiple requests occur simultaneously, there may be:
+- conn: connection used for writing to Datomic
 
-- Race conditions when reading/modifying the value
-
----
-
-## 📚 Important Concepts
-
-- `conn`: connection for writing to Datomic
-- `d/db`: immutable snapshot of the database
+- d/db: immutable snapshot of the database
 
 - Transactions: changes are always added, never altered
 
----
+- Lookup refs: allow identifying entities without knowing the internal ID
 
-## 🧪 Tests
-
-The project contains tests to validate:
+🧪 Tests
+The project may contain tests to validate:
 
 - Correct counter increment
 
----
+- Data persistence
 
-## 🧭 Conclusion
+- Database isolation in tests (datomic:mem)
 
-This project demonstrates how to build a simple yet robust application using functional concepts and an immutable database, serving as a basis for more complex systems.
+- Behavior under concurrency
+
+🧭 Conclusion
+
+This project demonstrates how to build a simple yet robust application using functional concepts and an immutable database.
+
+The separation between layers and the use of Datomic allow the application to evolve safely, serving as a basis for more complex systems.
