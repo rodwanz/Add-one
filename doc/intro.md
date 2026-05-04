@@ -88,6 +88,8 @@ Benefits:
 
 - Centralization of persistence logic
 
+---
+
 ### 🔌 Connection Management
 
 The connection to Datomic is initialized in the db namespace:
@@ -106,7 +108,9 @@ Avoid implicit dependencies
 
 Facilitate testing with different connections
 
-🔁 Counter Increment
+---
+
+### 🔁 Counter Increment
 
 The increment is done through:
 
@@ -118,7 +122,9 @@ Persistence via Transaction:
 
 :counter/value new-val]
 
-📚 Important Concepts
+---
+
+### 📚 Important Concepts
 
 - conn: connection used for writing to Datomic
 
@@ -128,7 +134,9 @@ Persistence via Transaction:
 
 - Lookup refs: allow identifying entities without knowing the internal ID
 
-🧪 Tests
+---
+
+### 🧪 Tests
 The project may contain tests to validate:
 
 - Correct counter increment
@@ -139,7 +147,9 @@ The project may contain tests to validate:
 
 - Behavior under concurrency
 
-🧭 Conclusion
+---
+
+### 🧭 Conclusion
 
 This project demonstrates how to build a simple yet robust application using functional concepts and an immutable database.
 
